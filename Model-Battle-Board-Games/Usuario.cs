@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JogosDeGuerraModel
+namespace BattleBoardGame.Model
 {
     [DataContract(IsReference = true)]
     public class Usuario

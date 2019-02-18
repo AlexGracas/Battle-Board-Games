@@ -1,8 +1,9 @@
-namespace JogosDeGuerraModel
+using Microsoft.EntityFrameworkCore;
+using System;
+
+namespace BattleBoardGame.Model
 {
-    using System;
-    using System.Data.Entity;
-    using System.Linq;
+
 
     public class ModelJogosDeGuerra : DbContext
     {
@@ -12,13 +13,14 @@ namespace JogosDeGuerraModel
         // 
         // If you wish to target a different database and/or database provider, modify the 'ModelJogosDeGuerra' 
         // connection string in the application configuration file.
-        public ModelJogosDeGuerra()
-            : base("name=ModelJogosDeGuerra")
+        public ModelJogosDeGuerra(DbContextOptions<ModelJogosDeGuerra>  options)
+            : base(options)
         {
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
+
 
         public virtual DbSet<Arqueiro> Arqueiros { get; set; }
 
@@ -35,7 +37,7 @@ namespace JogosDeGuerraModel
 
         public virtual DbSet<ElementoDoExercito> ElementosDoExercitos { get; set; }
 
-        public System.Data.Entity.DbSet<JogosDeGuerraModel.Tabuleiro> Tabuleiroes { get; set; }
+        public virtual DbSet<BattleBoardGame.Model.Tabuleiro> Tabuleiroes { get; set; }
     }
         
 }

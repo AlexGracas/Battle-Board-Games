@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JogosDeGuerraModel
+namespace BattleBoardGame.Model
 {
     public abstract class AbstractFactoryExercito
     {
@@ -32,11 +32,11 @@ namespace JogosDeGuerraModel
             }
             else if (Nacao.Egito == nacionalidade)
             {
-                factory = new FactoryExercitoPersa();
+                factory = new Factory.FactoryExercitoPersa();
             }
             else if (Nacao.India == nacionalidade)
             {
-                factory = new FactoryExercitoIndiano();
+                factory = new Factory.FactoryExercitoIndiano();
             }
             return factory;
         }
