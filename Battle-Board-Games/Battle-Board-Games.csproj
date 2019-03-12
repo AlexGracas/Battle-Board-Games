@@ -13,5 +13,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Models\packages.config" />
+    <Content Remove="Views\Home\Login.cshtml" />
+    <Content Remove="Views\Home\Tabuleiro.cshtml" />
+    <Content Remove="wwwroot\css\Login.css" />
+    <Content Remove="wwwroot\css\TabuleiroEstilo.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\Home\Login.cshtml" />
+    <None Include="Views\Home\Tabuleiro.cshtml" />
+    <None Include="wwwroot\css\Login.css" />
+    <None Include="wwwroot\css\TabuleiroEstilo.css" />
   </ItemGroup>
 </Project>

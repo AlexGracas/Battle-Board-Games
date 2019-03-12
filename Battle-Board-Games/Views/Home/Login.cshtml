@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+<div class="vertical-center">
+    <div class="container">
+        <div class="row">
+            <!--https://getbootstrap.com/docs/4.0/layout/grid/-->
+            <div class="col-sm-9 col-md-8 col-lg-5 col-md-offset-4 col-lg-3 col-sm-2">
+                <div class="card card-signin my-5">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Sign In</h5>
+                        <form>
+                            <div id="MensagemDiv" style="background:red; color:white; margin: 10px;">
+                                @ViewBag.Message
+                            </div>
+
+                            <div class="form-label-group">
+                                <input type="email" id="loginEmail" class="form-control" placeholder="Email address" required autofocus>
+                                <label for="loginEmail" style="text-align:left">Email address</label>
+
+                            </div>
+                            <div class="form-label-group">
+                                <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
+                                <label for="loginPassword" style="text-align:left">Password</label>
+                            </div>
+                            <div>
+                                <button onclick="login()" class="btn btn-lg btn-primary btn-block text-uppercase" type="button">Sign in</button>
+                                <button onclick="logout()" class="btn btn-lg btn-primary btn-block text-uppercase">Log Out</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet"
+      href="~/css/Login.css" />
+
+@section Scripts {
+    <script type="text/javascript">$(document).keypress(function (e) {
+        if (e.which == 13) {
+            login();
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    function showError(jqXHR) {
+        var response = jqXHR.responseJSON;
+        var errorDescription = response.error_description;
+        var mensagemDiv = document.getElementById("MensagemDiv");
+        mensagemDiv.innerHTML = errorDescription;
+    }
+
+    function logout() {
+        sessionStorage.clear();
+    }
+
+    function login() {
+        var baseUrl =
+            window.location.protocol +
+            "//" +
+            window.location.hostname +
+            (window.location.port ? ':' + window.location.port : '');
+        var loginData = {
+            grant_type: 'password',
+            username: document.getElementById("loginEmail").value,
+            password: document.getElementById("loginPassword").value
+        };
+
+        $.ajax({
+            type: 'POST',
+            url: baseUrl +'/Token',
+            data: loginData
+        }).done(function (data) {
+            // Cache the access token in session storage.
+            sessionStorage.setItem('accessToken', data.token_type + " " + data.access_token);
+            sessionStorage.setItem('emailUsuario', data.userName);
+            window.location.href = baseUrl + "/BatalhasMVC"
+        }).fail(showError);
+    }</script>
+}

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battle-Board-Games", "Battle-Board-Games\Battle-Board-Games.csproj", "{2C30DC04-DC9C-4A2B-8B71-C4E896A6D394}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model-Battle-Board-Games", "Model-Battle-Board-Games\Model-Battle-Board-Games.csproj", "{8B7179D2-B4EB-416C-A90F-033FA6ADBE96}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,5 +15,9 @@ Global
 		{2C30DC04-DC9C-4A2B-8B71-C4E896A6D394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C30DC04-DC9C-4A2B-8B71-C4E896A6D394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C30DC04-DC9C-4A2B-8B71-C4E896A6D394}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B7179D2-B4EB-416C-A90F-033FA6ADBE96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B7179D2-B4EB-416C-A90F-033FA6ADBE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B7179D2-B4EB-416C-A90F-033FA6ADBE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B7179D2-B4EB-416C-A90F-033FA6ADBE96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
