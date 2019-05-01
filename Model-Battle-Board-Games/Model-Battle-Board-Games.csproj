@@ -10,6 +10,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Factory\" />
+    <Folder Include="Persas\" />
+    <Folder Include="Indianos\" />
+    <Folder Include="Egipicios\" />
+    <Folder Include="DAL\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Class1.cs" />

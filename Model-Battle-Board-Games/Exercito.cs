@@ -39,7 +39,7 @@ namespace BattleBoardGame.Model
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }
         [DataMember]
-        public AbstractFactoryExercito.Nacao Nacao { get; set; }
+        public Factory.AbstractFactoryExercito.Nacao Nacao { get; set; }
 
         public ICollection<ElementoDoExercito> ElementosVivos { get
             {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BattleBoardGame.Model
+namespace BattleBoardGame.Model.Factory
 {
     public abstract class AbstractFactoryExercito
     {

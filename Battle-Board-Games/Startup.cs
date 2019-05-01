@@ -32,11 +32,12 @@ namespace BattleBoardGame
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            var connectionString = "";
-            services.AddEntityFrameworkSqlServer().AddDbContext<Model.ModelJogosDeGuerra>();
+
+            services.AddEntityFrameworkSqlServer().AddDbContext<Model.DAL.ModelJogosDeGuerra>();
+
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(framework: UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<Model.ModelJogosDeGuerra>();
+                .AddEntityFrameworkStores<Model.DAL.ModelJogosDeGuerra>();
 
             services.Configure<IdentityOptions>(
             options =>
@@ -59,7 +60,18 @@ namespace BattleBoardGame
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-              
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

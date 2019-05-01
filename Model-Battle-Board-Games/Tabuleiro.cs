@@ -59,8 +59,8 @@ namespace BattleBoardGame.Model
                     //Ultima ou primeira fileira?
                     Exercito exercito = (j == 0 || j == 1) ? exercito1 : exercito2;
                     ElementoDoExercito elemento = null;
-                    AbstractFactoryExercito factory = 
-                        AbstractFactoryExercito.CriarFactoryExercito(exercito.Nacao);
+                    Factory.AbstractFactoryExercito factory = 
+                        Factory.AbstractFactoryExercito.CriarFactoryExercito(exercito.Nacao);
 
                     if (j==0 || j == this.Altura - 1)
                     {             

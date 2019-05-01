@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace BattleBoardGame.Model
+namespace BattleBoardGame.Model.DAL
 {
 
 

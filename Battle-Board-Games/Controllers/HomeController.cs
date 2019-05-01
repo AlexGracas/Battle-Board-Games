@@ -15,7 +15,7 @@ namespace BattleBoardGame.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Aplicação desenvolvida para o curso de Análise" +
-            	"e Desenvolvimento de Sistemas da Universidade Positivo.";
+            	" e Desenvolvimento de Sistemas da Universidade Positivo.";
 
             return View();
         }
@@ -33,8 +33,8 @@ namespace BattleBoardGame.Controllers
         }
        
 
-        private readonly Model.ModelJogosDeGuerra _context;
-        public HomeController(Model.ModelJogosDeGuerra context)
+        private readonly Model.DAL.ModelJogosDeGuerra _context;
+        public HomeController(Model.DAL.ModelJogosDeGuerra context)
         {
             this._context = context;
         }

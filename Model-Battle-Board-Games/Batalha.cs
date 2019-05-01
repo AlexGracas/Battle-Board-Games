@@ -90,7 +90,7 @@ namespace BattleBoardGame.Model
         }
 
         public void CriarBatalha(
-          AbstractFactoryExercito.Nacao Nacao,
+          Factory.AbstractFactoryExercito.Nacao Nacao,
           Usuario usuarioLogado)
         {
             Exercito e;
