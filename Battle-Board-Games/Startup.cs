@@ -35,9 +35,9 @@ namespace BattleBoardGame
 
             services.AddEntityFrameworkSqlServer().AddDbContext<Model.DAL.ModelJogosDeGuerra>();
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(framework: UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<Model.DAL.ModelJogosDeGuerra>();
+            //services.AddDefaultIdentity<IdentityUser>()
+            //    .AddDefaultUI(framework: UIFramework.Bootstrap4)
+            //    .AddEntityFrameworkStores<Model.DAL.ModelJogosDeGuerra>();
 
             services.Configure<IdentityOptions>(
             options =>
@@ -67,7 +67,7 @@ namespace BattleBoardGame
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Account/Login";
+                options.LoginPath = "/Identity/Account/Login_";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
