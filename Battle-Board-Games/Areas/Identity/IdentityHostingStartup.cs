@@ -1,6 +1,7 @@
 ﻿using System;
 using BattleBoardGames.Areas.Identity.Data;
 using BattleBoardGames.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -15,6 +16,8 @@ namespace BattleBoardGames.Areas.Identity
     {
         public void Configure(IWebHostBuilder builder)
         {
+
+
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<BattleBoardGamesContext>(options =>
                     options.UseSqlServer(
@@ -22,6 +25,7 @@ namespace BattleBoardGames.Areas.Identity
 
                 services.AddDefaultIdentity<BattleBoardGamesUser>()
                     .AddEntityFrameworkStores<BattleBoardGamesContext>();
+               
             });
         }
     }
