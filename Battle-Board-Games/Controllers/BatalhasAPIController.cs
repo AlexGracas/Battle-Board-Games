@@ -23,6 +23,7 @@ namespace Battle_Board_Games.Controllers
             _context = context;
         }
 
+        [Authorize]
         // GET: api/BatalhasAPI
         [HttpGet]
         public IEnumerable<Batalha> GetBatalhas(bool Finalizada = true)
@@ -65,7 +66,8 @@ namespace Battle_Board_Games.Controllers
             return Ok(batalha);
         }
 
-
+        [Route("IniciarBatalha")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> IniciarBatalha(int id)
         {
             var usuario = this.User;
