@@ -24,6 +24,7 @@ namespace BattleBoardGame.Model
         }
         [DataMember]
         public int Id { get; set; }
+
         [DataMember]
         public int Largura { get; set; }
 

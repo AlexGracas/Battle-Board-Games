@@ -17,7 +17,7 @@ namespace BattleBoardGame.Model
     public class Usuario
     {
         [DataMember]
-        public int Id { get; set; }
+        public string Id { get; set; }
         public IList<Batalha> Batalhas { get; set; }
         [DataMember]
         public string FirstName { get; set; }

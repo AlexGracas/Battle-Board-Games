@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.EntityFrameworkCore;
 
 namespace BattleBoardGame
 {
@@ -33,11 +34,12 @@ namespace BattleBoardGame
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddEntityFrameworkSqlServer().AddDbContext<Model.DAL.ModelJogosDeGuerra>();
-
-            //services.AddDefaultIdentity<IdentityUser>()
-            //    .AddDefaultUI(framework: UIFramework.Bootstrap4)
-            //    .AddEntityFrameworkStores<Model.DAL.ModelJogosDeGuerra>();
+            services.AddEntityFrameworkSqlServer().AddDbContext<Model.DAL.ModelJogosDeGuerra>(
+                options =>
+                {
+                options.UseSqlServer(Configuration.GetConnectionString("ModelJogosDeGuerra"));
+                }
+                );
 
             services.Configure<IdentityOptions>(
             options =>

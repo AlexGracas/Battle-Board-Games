@@ -16,7 +16,36 @@ namespace BattleBoardGame.Model.DAL
         public ModelJogosDeGuerra(DbContextOptions<ModelJogosDeGuerra>  options)
             : base(options)
         {
+
         }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.Tabuleiro).
+                WithOne();
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.ExercitoBranco).
+                WithOne();
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.ExercitoPreto).
+                WithOne();
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.Vencedor).
+                WithOne();
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.Vencedor).
+                WithOne();
+            modelBuilder.Entity<Batalha>().
+                HasOne(b => b.Turno).
+                WithOne();
+            modelBuilder.Entity<ElementoDoExercito>().
+                OwnsOne(e => e.posicao);
+
+
+        }                
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
@@ -37,7 +66,7 @@ namespace BattleBoardGame.Model.DAL
 
         public virtual DbSet<ElementoDoExercito> ElementosDoExercitos { get; set; }
 
-        public virtual DbSet<BattleBoardGame.Model.Tabuleiro> Tabuleiroes { get; set; }
+        public virtual DbSet<Tabuleiro> Tabuleiros { get; set; }
     }
         
 }

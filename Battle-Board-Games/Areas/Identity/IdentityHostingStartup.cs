@@ -18,7 +18,7 @@ namespace BattleBoardGames.Areas.Identity
             builder.ConfigureServices((context, services) => {
                 services.AddDbContext<BattleBoardGamesContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("BattleBoardGamesContextConnection")));
+                        context.Configuration.GetConnectionString("IdentidadeBattleBoardGamesConnection")));
 
                 services.AddDefaultIdentity<BattleBoardGamesUser>()
                     .AddEntityFrameworkStores<BattleBoardGamesContext>();

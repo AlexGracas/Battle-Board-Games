@@ -34,7 +34,7 @@ namespace BattleBoardGame.Model
         [ForeignKey("BatalhaId")]
         public Batalha Batalha { get; set; }
         [DataMember]
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
         [DataMember]
         [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }

@@ -46,6 +46,7 @@ namespace BattleBoardGame.Model
         public int? VencedorId { get; set; }
 
         [ForeignKey("VencedorId")]
+        
         public Exercito Vencedor { get; set; } = null;
         [DataMember]
         public int? TurnoId { get; set; }
@@ -160,7 +161,7 @@ namespace BattleBoardGame.Model
     {
         public Posicao posicao { get; set; }
 
-        public int AutorId { get; set; }
+        public string AutorId { get; set; }
         [ForeignKey("AutorId")]
         public Exercito Autor { get; set; }
 

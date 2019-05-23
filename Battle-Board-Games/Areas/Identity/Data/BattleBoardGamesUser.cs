@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BattleBoardGame.Model;
 using Microsoft.AspNetCore.Identity;
 
 namespace BattleBoardGames.Areas.Identity.Data
