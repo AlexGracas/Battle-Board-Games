@@ -23,10 +23,10 @@ namespace Battle_Board_Games.Controllers
             _context = context;
         }
 
-        [Authorize]
         // GET: api/BatalhasAPI
+        [Authorize]
         [HttpGet]
-        public IEnumerable<Batalha> GetBatalhas(bool Finalizada = true)
+        public IEnumerable<Batalha> GetBatalhas(bool Finalizada = false)
         {
             IEnumerable<Batalha> batalhas;
             if (Finalizada)
@@ -40,7 +40,7 @@ namespace Battle_Board_Games.Controllers
             return batalhas;
         }
 
-        // GET: api/BatalhasAPI/5
+        // GET: api/BatalhasAPI?id=5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBatalha([FromRoute] int id)
         {
@@ -201,6 +201,52 @@ namespace Battle_Board_Games.Controllers
 
             return CreatedAtAction("GetBatalha", new { id = batalha.Id }, batalha);
         }
+
+        [HttpGet]
+        [Route("CriarBatalha")]
+        public async Task<IActionResult> CriarBatalha()
+        {
+            var batalha = _context.Batalhas.FirstOrDefault(b =>
+            (b.ExercitoBrancoId == null 
+            || b.ExercitoPretoId== null) &&
+            (b.ExercitoBranco.UsuarioId != User.Identity.Name
+            && b.ExercitoPreto.UsuarioId != User.Identity.Name));
+
+            var usuario = _context
+                .Usuarios
+                .FirstOrDefault(u => u.Email == User.Identity.Name);
+            if (usuario != null)
+            {
+                usuario =
+                    new Usuario()
+                    {
+                        Id = User.Identity.Name,
+                        Email = User.Identity.Name
+                    };
+                _context.Add(usuario);
+                _context.SaveChanges();
+            }
+
+            if(batalha == null)
+            {
+                batalha = new Batalha();
+                _context.Add(batalha);
+            }        
+            Exercito e = new Exercito();
+            e.UsuarioId = User.Identity.Name;
+            if(batalha.ExercitoBrancoId == null)
+            {
+                batalha.ExercitoBranco = e;
+            }
+            else
+            {
+                batalha.ExercitoPreto = e;
+            }
+            _context.SaveChanges();
+            return Ok(batalha);
+        }
+
+
 
         // DELETE: api/BatalhasAPI/5
         [HttpDelete("{id}")]
