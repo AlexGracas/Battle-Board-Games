@@ -18,9 +18,17 @@ namespace Battle_Board_Games.Controllers
     {
         private readonly ModelJogosDeGuerra _context;
 
-        public BatalhasAPIController(ModelJogosDeGuerra context)
+        public BatalhasAPIController
+            (ModelJogosDeGuerra context)
         {
             _context = context;
+        }
+
+        [HttpGet]
+        [Route("QtdBatalhas")]
+        public async Task<IActionResult> ObterQuantidadeBatalhas()
+        {
+            return Ok(await _context.Batalhas.CountAsync());
         }
 
         // GET: api/BatalhasAPI
@@ -39,6 +47,25 @@ namespace Battle_Board_Games.Controllers
             }
             return batalhas;
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("QtdBatalhasJogador")]
+        public async Task<IActionResult> GetBatalhasJogador()
+        {
+            var batalhas = _context.Batalhas
+                .Where(b => (b.ExercitoBranco != null &&
+                            b.ExercitoBranco.UsuarioId ==
+                            User.Identity.Name)
+                            ||
+                            (b.ExercitoPreto != null &&
+                            b.ExercitoPreto.UsuarioId ==
+                            User.Identity.Name))
+                            .Count();
+            return Ok(batalhas);
+                            
+        }
+
 
         // GET: api/BatalhasAPI?id=5
         [HttpGet("{id}")]
