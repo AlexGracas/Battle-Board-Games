@@ -10,5 +10,21 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-<h5>Seja Bem Vindo! - @UserManager.GetUserName(User) </h5>
+    <h5>Seja Bem Vindo! - @UserManager.GetUserName(User) </h5>
+}
+
+<h2>Jogos no Sistema:</h2><H3 id="qtBatalhas"></H3>
+
+
+@section Scripts{
+    <script src="~/js/batalhas.js"></script>
+    <script type="text/javascript" >        
+        $(function () {
+            ObterQuantidadeBatalha("qtBatalhas");                    
+        })
+            
+
+
+
+    </script>
 }

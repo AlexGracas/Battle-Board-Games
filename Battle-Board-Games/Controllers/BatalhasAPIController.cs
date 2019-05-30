@@ -40,6 +40,22 @@ namespace Battle_Board_Games.Controllers
             return batalhas;
         }
 
+        // GET: api/BatalhasAPI
+        [Route("BatalhasSize")]
+        public int GetBatalhasSize(bool somenteEmAndamento = false)
+        {
+            IEnumerable<Batalha> batalhas;
+            if (somenteEmAndamento)
+            {
+                batalhas = _context.Batalhas.Where(b => b.Vencedor == null).ToList();
+            }
+            else
+            {
+                batalhas = _context.Batalhas.ToList();
+            }
+            return batalhas.Count();
+        }
+
         // GET: api/BatalhasAPI?id=5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBatalha([FromRoute] int id)
@@ -215,6 +231,7 @@ namespace Battle_Board_Games.Controllers
             var usuario = _context
                 .Usuarios
                 .FirstOrDefault(u => u.Email == User.Identity.Name);
+
             if (usuario != null)
             {
                 usuario =
