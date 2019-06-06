@@ -9,6 +9,9 @@ using BattleBoardGame.Model;
 using BattleBoardGame.Model.DAL;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using BattleBoardGames.Services;
+using Microsoft.AspNetCore.Identity;
+using BattleBoardGames.Areas.Identity.Data;
 
 namespace Battle_Board_Games.Controllers
 {
@@ -18,10 +21,16 @@ namespace Battle_Board_Games.Controllers
     {
         private readonly ModelJogosDeGuerra _context;
 
+
+        UserManager<BattleBoardGamesUser> _userManager;
+
+        UsuarioService _usuarioService;
         public BatalhasAPIController
-            (ModelJogosDeGuerra context)
+            (ModelJogosDeGuerra context, UserManager<BattleBoardGamesUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+            _usuarioService = new UsuarioService(_context, _userManager);
         }
 
         [HttpGet]
@@ -95,9 +104,13 @@ namespace Battle_Board_Games.Controllers
 
         [Route("IniciarBatalha")]
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> IniciarBatalha(int id)
         {
-            var usuario = this.User;
+
+
+            var usuario = _usuarioService.ObterUsuarioEmail(this.User);
+
 
             //Get batalha
             var batalha = _context.Batalhas
@@ -107,8 +120,8 @@ namespace Battle_Board_Games.Controllers
                 .Include(b => b.Turno)
                 .Include(b => b.Turno.Usuario)
                 .Where(b =>
-                (b.ExercitoBranco.Usuario.Email == usuario.Identity.Name
-                || b.ExercitoPreto.Usuario.Email == usuario.Identity.Name)
+                (b.ExercitoBranco.Usuario.Id == usuario.Id
+                || b.ExercitoPreto.Usuario.Id == usuario.Id)
                 && (b.ExercitoBranco != null && b.ExercitoPreto != null)
                 && b.Id == id).FirstOrDefault();
             if (batalha == null)
@@ -231,28 +244,20 @@ namespace Battle_Board_Games.Controllers
 
         [HttpGet]
         [Route("CriarBatalha")]
+        [Authorize]
         public async Task<IActionResult> CriarBatalha()
         {
-            var batalha = _context.Batalhas.FirstOrDefault(b =>
+            var usuario = _usuarioService.ObterUsuarioEmail(this.User);
+
+            var batalha = _context.Batalhas.Include(b => b.ExercitoBranco)
+                .Include(b => b.ExercitoPreto)
+                .FirstOrDefault(b =>
             (b.ExercitoBrancoId == null 
             || b.ExercitoPretoId== null) &&
-            (b.ExercitoBranco.UsuarioId != User.Identity.Name
-            && b.ExercitoPreto.UsuarioId != User.Identity.Name));
+            (b.ExercitoBranco.UsuarioId != usuario.Id
+            && b.ExercitoPreto.UsuarioId != usuario.Id));
 
-            var usuario = _context
-                .Usuarios
-                .FirstOrDefault(u => u.Email == User.Identity.Name);
-            if (usuario != null)
-            {
-                usuario =
-                    new Usuario()
-                    {
-                        Id = User.Identity.Name,
-                        Email = User.Identity.Name
-                    };
-                _context.Add(usuario);
-                _context.SaveChanges();
-            }
+
 
             if(batalha == null)
             {
@@ -260,7 +265,7 @@ namespace Battle_Board_Games.Controllers
                 _context.Add(batalha);
             }        
             Exercito e = new Exercito();
-            e.UsuarioId = User.Identity.Name;
+            e.Usuario = usuario;
             if(batalha.ExercitoBrancoId == null)
             {
                 batalha.ExercitoBranco = e;

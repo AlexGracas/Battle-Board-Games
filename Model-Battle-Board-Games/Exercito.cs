@@ -23,6 +23,7 @@ namespace BattleBoardGame.Model
             return this.Id.GetHashCode();
         }
         [DataMember]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         [DataMember]
         [InverseProperty("Exercito")]

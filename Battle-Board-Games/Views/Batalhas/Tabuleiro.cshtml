@@ -1,0 +1,73 @@
+﻿@model BattleBoardGame.Model.Batalha
+
+@{
+    ViewBag.Title = "Tabuleiro";
+}
+
+<link rel="stylesheet"
+      href="~/css/TabuleiroEstilo.css" />
+
+<div class="row container-tabuleiro" style="display:none">
+    <div class="col-md-3 col-lg-3">
+        <div class="container container-card">
+            <div class="card left-card player-card">
+                <div class="card-body">
+                    <strong><p style="font-size: 20px;" class="card-text">Nome do Jogador</p></strong>
+                    <p class="card-text">
+                        @Model.ExercitoBranco.Usuario.PrimeiroNome
+                    </p>
+                    <strong><p style="font-size: 20px;" class="card-text">Exército</p></strong>
+                    <p class="card-text">@Model.ExercitoBranco.Nacao</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-6">
+        <div id="tabuleiro"></div>
+    </div>
+    <div class="col-md-3 col-lg-3">
+        <div class="container container-card">
+            <div class="card left-card player-card">
+                <div class="card-body">
+                    <strong><p style="font-size: 20px;" class="card-text">Nome do Jogador</p></strong>
+                    <p class="card-text">
+                        @Model.ExercitoPreto.Usuario.PrimeiroNome
+                    </p>
+                    <strong><p style="font-size: 20px;" class="card-text">Exército</p></strong>
+                    <p class="card-text">@Model.ExercitoPreto.Nacao</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section MeusScripts{
+    <script src="~/js/tabuleiro.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.6/dist/loadingoverlay.min.js"></script>
+    <script>
+
+        var BatalhaId = @Html.Raw(ViewBag.Id);
+
+        $("body").LoadingOverlay("show", {
+            text: "Carregando partida...",
+            textColor: "rgb(255,255,255, 0.8)",
+            imageColor: "#4a2026",
+            textAnimation: "2s fadein",
+            background: "rgb(23,24,34, 0.8)",
+            fade: [0, 300],
+        });
+
+        setTimeout(function () {
+            $.LoadingOverlay("hide");
+            $(".loadingoverlay").fadeOut("fast");
+            $(".container-tabuleiro").fadeIn("fast");
+        }, 2000);
+
+        $(document).ready(function () {
+            ObterBatalha(BatalhaId);
+        });
+    </script>
+}
+
+

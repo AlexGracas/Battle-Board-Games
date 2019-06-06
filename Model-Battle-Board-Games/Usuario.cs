@@ -20,9 +20,9 @@ namespace BattleBoardGame.Model
         public string Id { get; set; }
         public IList<Batalha> Batalhas { get; set; }
         [DataMember]
-        public string FirstName { get; set; }
+        public string PrimeiroNome { get; set; }
         [DataMember]
-        public string LastName { get; set; }
+        public string SobreNome { get; set; }
         [DataMember]
         public string Username { get; set; }
 
