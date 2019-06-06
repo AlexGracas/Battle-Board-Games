@@ -18,9 +18,17 @@ namespace Battle_Board_Games.Controllers
     {
         private readonly ModelJogosDeGuerra _context;
 
-        public BatalhasAPIController(ModelJogosDeGuerra context)
+        public BatalhasAPIController
+            (ModelJogosDeGuerra context)
         {
             _context = context;
+        }
+
+        [HttpGet]
+        [Route("QtdBatalhas")]
+        public async Task<IActionResult> ObterQuantidadeBatalhas()
+        {
+            return Ok(await _context.Batalhas.CountAsync());
         }
 
         // GET: api/BatalhasAPI
@@ -40,21 +48,24 @@ namespace Battle_Board_Games.Controllers
             return batalhas;
         }
 
-        // GET: api/BatalhasAPI
-        [Route("BatalhasSize")]
-        public int GetBatalhasSize(bool somenteEmAndamento = false)
+        [Authorize]
+        [HttpGet]
+        [Route("QtdBatalhasJogador")]
+        public async Task<IActionResult> GetBatalhasJogador()
         {
-            IEnumerable<Batalha> batalhas;
-            if (somenteEmAndamento)
-            {
-                batalhas = _context.Batalhas.Where(b => b.Vencedor == null).ToList();
-            }
-            else
-            {
-                batalhas = _context.Batalhas.ToList();
-            }
-            return batalhas.Count();
+            var batalhas = _context.Batalhas
+                .Where(b => (b.ExercitoBranco != null &&
+                            b.ExercitoBranco.UsuarioId ==
+                            User.Identity.Name)
+                            ||
+                            (b.ExercitoPreto != null &&
+                            b.ExercitoPreto.UsuarioId ==
+                            User.Identity.Name))
+                            .Count();
+            return Ok(batalhas);
+                            
         }
+
 
         // GET: api/BatalhasAPI?id=5
         [HttpGet("{id}")]
@@ -231,7 +242,6 @@ namespace Battle_Board_Games.Controllers
             var usuario = _context
                 .Usuarios
                 .FirstOrDefault(u => u.Email == User.Identity.Name);
-
             if (usuario != null)
             {
                 usuario =
