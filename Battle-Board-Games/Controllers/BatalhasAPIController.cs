@@ -1,17 +1,16 @@
-﻿using System;
+﻿using BattleBoardGame.Model;
+using BattleBoardGame.Model.DAL;
+using BattleBoardGames.Areas.Identity.Data;
+using BattleBoardGames.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using BattleBoardGame.Model;
-using BattleBoardGame.Model.DAL;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using BattleBoardGames.Services;
-using Microsoft.AspNetCore.Identity;
-using BattleBoardGames.Areas.Identity.Data;
+using static BattleBoardGame.Model.Factory.AbstractFactoryExercito;
 
 namespace Battle_Board_Games.Controllers
 {
@@ -76,8 +75,19 @@ namespace Battle_Board_Games.Controllers
         }
 
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EscolherNacao(Nacao nacao, int ExercitoId)
+        {
+            var exercito = _context.Exercitos.Where(e => e.Id == ExercitoId).FirstOrDefault();
+            exercito.Nacao = nacao;
+            await _context.SaveChangesAsync();
+            return Ok(exercito);
+        }
+
         // GET: api/BatalhasAPI?id=5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetBatalha([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -102,8 +112,7 @@ namespace Battle_Board_Games.Controllers
             return Ok(batalha);
         }
 
-        [Route("IniciarBatalha")]
-        [HttpGet("{id}")]
+        [Route("IniciarBatalha/{id}")]
         [Authorize]
         public async Task<IActionResult> IniciarBatalha(int id)
         {
@@ -135,15 +144,20 @@ namespace Battle_Board_Games.Controllers
                 batalha.Tabuleiro.Altura = 8;
                 batalha.Tabuleiro.Largura = 8;
             }
-
-            if (batalha.Estado == Batalha.EstadoBatalhaEnum.NaoIniciado)
+            try
             {
-                batalha.Tabuleiro.IniciarJogo(batalha.ExercitoBranco, batalha.ExercitoPreto);
-                Random r = new Random();
-                batalha.Turno = r.Next(100) < 50
-                    ? batalha.ExercitoPreto :
-                    batalha.ExercitoBranco;
-                batalha.Estado = Batalha.EstadoBatalhaEnum.Iniciado;
+                if (batalha.Estado == Batalha.EstadoBatalhaEnum.NaoIniciado)
+                {
+                    batalha.Tabuleiro.IniciarJogo(batalha.ExercitoBranco, batalha.ExercitoPreto);
+                    Random r = new Random();
+                    batalha.Turno = r.Next(100) < 50
+                        ? batalha.ExercitoPreto :
+                        batalha.ExercitoBranco;
+                    batalha.Estado = Batalha.EstadoBatalhaEnum.Iniciado;
+                }
+            }catch(ArgumentException arg)
+            {
+                BadRequest("Não foi escolhido uma nação.");
             }
             _context.SaveChanges();
             return Ok(batalha);
@@ -152,20 +166,32 @@ namespace Battle_Board_Games.Controllers
         [Authorize]
         [Route("Jogar")]
         [HttpPost]
-        public async Task<IActionResult> Jogar(Movimento movimento)
+        public async Task<IActionResult> Jogar([FromBody]Movimento movimento)
         {
             movimento.Elemento =
-                _context.ElementosDoExercitos.Find(movimento.ElementoId);
+                _context.ElementosDoExercitos
+                .Include(el => el.Exercito)
+                    .FirstOrDefault(el => el.Id == movimento.ElementoId);
             if (movimento.Elemento == null)
             {
                 return NotFound();
             }
 
             movimento.Batalha =
-                _context.Batalhas.Find(movimento.BatalhaId);
-            var usuario = this.User.Identity;
-            
-            if (usuario.Name != movimento.AutorId)
+                _context.Batalhas
+                .Include(b => b.Tabuleiro)
+                .Include(b => b.Tabuleiro.ElementosDoExercito)
+                .Include(b => b.ExercitoBranco)
+                .Include(b => b.ExercitoPreto)
+                .Include(b => b.Turno)
+                .Include(b => b.Vencedor)
+                .FirstOrDefault(
+                    m=> m.Id == movimento.BatalhaId);
+
+            var usuario = this._usuarioService.ObterUsuarioEmail(this.User);
+
+
+            if (usuario.Id != movimento.AutorId)
             {
                 return Forbid("O usuário autenticado não é o autor da jogada");
             }
@@ -266,6 +292,7 @@ namespace Battle_Board_Games.Controllers
             }        
             Exercito e = new Exercito();
             e.Usuario = usuario;
+            e.Nacao = Nacao.Egito;
             if(batalha.ExercitoBrancoId == null)
             {
                 batalha.ExercitoBranco = e;

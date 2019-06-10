@@ -38,7 +38,7 @@ namespace BattleBoardGame.Model
         public string UsuarioId { get; set; }
         [DataMember]
         [ForeignKey("UsuarioId")]
-        public Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; }
         [DataMember]
         public Factory.AbstractFactoryExercito.Nacao Nacao { get; set; }
 

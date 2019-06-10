@@ -1,0 +1,56 @@
+﻿@model BattleBoardGame.Model.Batalha
+@{
+    ViewData["Title"] = "Lobby";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lobby</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p style="text-align:center">
+                @if (!@String.IsNullOrEmpty(Model.ExercitoBranco.Usuario.PrimeiroNome))
+                {
+                    @Model.ExercitoBranco.Usuario.PrimeiroNome
+                }
+                else
+                {
+                    @Model.ExercitoBranco.Usuario.Username
+                }
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p style="text-align:center">VS</p>
+        </div>
+        <div class="col-md-4">
+            <p style="text-align:center">
+                @if (Model.ExercitoPreto != null)
+                {
+                    @if (!@String.IsNullOrEmpty(Model.ExercitoPreto.Usuario.PrimeiroNome))
+                    {
+                        @Model.ExercitoPreto.Usuario.PrimeiroNome
+                    }
+                    else
+                    {
+                        @Model.ExercitoPreto.Usuario.Username
+                    }
+                }
+                else
+                {
+                <p>Esperando o próximo jogador...</p>
+            }
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button id="singlebutton" name="singlebutton" class="btn btn-primary"
+                        onclick="iniciarBatalha('@Model.Id')">Iniciar Jogo</button>
+            </div>
+        </div>
+
+        @section Scripts{
+            <script src="~/js/IniciarBatalha.js"></script>
+        }

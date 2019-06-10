@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -46,12 +47,11 @@ namespace BattleBoardGame.Model
             return elemento.posicao;
         }
 
+       
         public void IniciarJogo(Exercito exercito1, Exercito exercito2)
         {
-            /*Casas = new ElementoDoExercito[Largura][];
-            for(int i = 0; i < this.Largura; i++){
-                this.Casas[i] = new ElementoDoExercito[Altura];
-            }*/
+            Contract.Requires<ArgumentException>(exercito1.Nacao > 0);
+            Contract.Requires<ArgumentException>(exercito2.Nacao > 0);
 
             for(int i=0; i< this.Largura; i++)
             {
@@ -79,11 +79,9 @@ namespace BattleBoardGame.Model
                     //Se o elemento tiver sido instanciado criará o elemento no tabuleiro.
                     if (elemento != null)
                     {
-
                         exercito.Elementos.Add(elemento);
                         elemento.posicao = new Posicao(i, j);
                         elemento.Tabuleiro = this;
-//                        this.Casas.Add(elemento.posicao, elemento);
                     }
 
 

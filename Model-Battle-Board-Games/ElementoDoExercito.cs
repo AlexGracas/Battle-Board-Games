@@ -77,7 +77,7 @@ namespace BattleBoardGame.Model
 
         [ForeignKey("ExercitoId")]
         [InverseProperty("Elementos")]
-        public Exercito Exercito { get; set; }
+        public virtual Exercito Exercito { get; set; }
 
         [DataMember]
         public abstract int AlcanceMovimento {get; protected set;}

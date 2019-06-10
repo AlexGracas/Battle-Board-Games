@@ -85,15 +85,15 @@ $(function () {
     MontarTabuleiro = function(batalhaParam) {
         pecasNoTabuleiro = [];
         var batalha = batalhaParam;
-        var pecas = batalha.Tabuleiro.ElementosDoExercito
-        var ExercitoBrancoId = batalha.ExercitoBrancoId;
-        var ExercitoPretoId = batalha.ExercitoPretoId;
+        var pecas = batalha.tabuleiro.elementosDoExercito
+        var ExercitoBrancoId = batalha.exercitoBrancoId;
+        var ExercitoPretoId = batalha.exercitoPretoId;
         var i;
         $("#tabuleiro").empty();
-        for (i = 0; i < batalha.Tabuleiro.Altura; i++) {
+        for (i = 0; i < batalha.tabuleiro.altura; i++) {
             $("#tabuleiro").append("<div id='linha_" + i.toString() + "' class='linha' >");
             pecasNoTabuleiro[i] = [];
-            for (j = 0; j < batalha.Tabuleiro.Largura; j++) {
+            for (j = 0; j < batalha.tabuleiro.largura; j++) {
                 var nome_casa = "casa_" + i.toString() + "_" + j.toString();
                 var classe = (i % 2 == 0 ? (j % 2 == 0 ? "casa_branca" : "casa_preta") : (j % 2 != 0 ? "casa_branca" : "casa_preta"));
                 $("#linha_" + i.toString()).append("<div id='" + nome_casa + "' class='casa " + classe + "' />");
@@ -102,12 +102,12 @@ $(function () {
                     if (pecas[x].Saude <= 0) {
                         continue;
                     }
-                    if (pecas[x].posicao.Altura == i && pecas[x].posicao.Largura == j){
+                    if (pecas[x].posicao.altura == i && pecas[x].posicao.largura == j){
                         pecasNoTabuleiro[i][j] = pecas[x];                    
-                        if (pecas[x].ExercitoId==ExercitoBrancoId) {
+                        if (pecas[x].exercitoId==ExercitoBrancoId) {
                             $("#" + nome_casa).append("<img src='https://www.w3schools.com/images/compatible_firefox.gif' class='peca' id='" + nome_casa.replace("casa", "peca_preta") + "'/>");
                         }
-                        else if (pecas[x].ExercitoId == ExercitoPretoId) {
+                        else if (pecas[x].exercitoId == ExercitoPretoId) {
                             $("#" + nome_casa).append("<img src='https://www.w3schools.com/images/compatible_safari.gif' class='peca' id='" + nome_casa.replace("casa", "peca_branca") + "'/>");
                         }
 
@@ -146,7 +146,7 @@ $(function () {
                     Altura: altura,
                     Largura: largura
                 };
-                var ExercitoTurno = (batalha.TurnoId == batalha.ExercitoBrancoId) ? batalha.ExercitoBranco : batalha.ExercitoPreto;
+                var ExercitoTurno = (batalha.turnoId == batalha.exercitoBrancoId) ? batalha.exercitoBranco : batalha.exercitoPreto;
 
                 if(ObterPecaIDNaCasa(casa_selecionada) == null) {
                     ataque = false;
@@ -155,22 +155,23 @@ $(function () {
                 }
 
                 var movimento = {
-                    Posicao: posicaopeca,
-                    AutorId: ExercitoTurno.UsuarioId,
-                    BatalhaId: batalha.Id,
-                    ElementoId: pecaSelecionadaObj.Id,
+                    posicao: posicaopeca,
+                    AutorId: ExercitoTurno.usuarioId,
+                    BatalhaId: batalha.id,
+                    ElementoId: pecaSelecionadaObj.id,
                     TipoMovimento: ataque ? "Atacar" :"Mover"
                 };
-                var EmailUsuario = sessionStorage.getItem("emailUsuario");
+                var EmailUsuario = sessionStorage.getItem("EmailUsuario");
 
 
-                if (ExercitoTurno.Usuario.Email == EmailUsuario &&
-                    ExercitoTurno.Id == pecaSelecionadaObj.ExercitoId
+                if (ExercitoTurno.usuario.email == EmailUsuario ||
+                    ExercitoTurno.usuario.username == EmailUsuario&&
+                    ExercitoTurno.id == pecaSelecionadaObj.exercitoId
                 ) {
                     Mover(movimento, pecaElem.parentNode, document.getElementById(casa_selecionada), pecaElem);
-                } else if (ExercitoTurno.Usuario.Email != EmailUsuario){
+                } else if (ExercitoTurno.usuario.username != EmailUsuario) {
                     alert("Não é a sua vez!");
-                } else if (ExercitoTurno.Id != pecaSelecionadaObj.ExercitoId){
+                } else if (ExercitoTurno.id != pecaSelecionadaObj.exercitoId){
                     alert("Não é o seu exercito!");
                 }
             
@@ -184,28 +185,17 @@ $(function () {
             return $("#" + casa_selecionada).children("img:first").attr("id");
         }
 
-        function Mover(movimento, posAntiga, posNova, peca) {
-            var token = sessionStorage.getItem("accessToken");
-            var headers = {};
-            if (token) {
-                headers.Authorization = token;
-            }
+        function Mover(movimento, posAntiga, posNova, peca) {           
             $.ajax({
                 type: 'POST',
-                url: baseUrl + "/api/Batalhas/Jogar",
-                headers: headers,
-                data: movimento
+                url: baseUrl + "/api/BatalhasAPI/Jogar",
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(movimento)
             })
                 .done(
                 function (data) {
                     MontarTabuleiro(data);
-                    /*
-                    if (movimento.TipoMovimento == "Mover") {
-                        MoverPeca(posAntiga, posNova, peca)
-                    } else {
-                        window.reload();
-                    }
-                    */
                 }
                 )
                 .fail(

@@ -28,4 +28,20 @@ $.ajax({
                 .innerHTML = data;
         }
     )
-    .fail()
+    .fail();
+function criarJogo() {
+    $.ajax({
+        type: 'GET',
+        url: baseURL +
+            "/api/BatalhasAPI/CriarBatalha"
+    })
+        .done(
+            function (data) {
+                window.location.href = "/Batalhas/Lobby/" + data.id;
+            }
+        )
+        .fail(
+            function () {
+                alert("Erro ao Criar a Batalha.")
+            });
+}
