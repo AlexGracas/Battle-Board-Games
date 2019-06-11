@@ -115,6 +115,10 @@ namespace BattleBoardGame.Model
 
         public bool Jogar (Movimento movimento)
         {
+            if(movimento.Elemento.Saude <= 0)
+            {
+                return false;
+            }
             if(movimento.TipoMovimento == Movimento.EnumTipoMovimento.Mover)
             {
                 //O destino da movimentação da peça deve estar vazio.

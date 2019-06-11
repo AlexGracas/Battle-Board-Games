@@ -185,6 +185,8 @@ namespace Battle_Board_Games.Controllers
                 .Include(b => b.ExercitoPreto)
                 .Include(b => b.Turno)
                 .Include(b => b.Vencedor)
+                .Include(b => b.ExercitoBranco.Usuario)
+                .Include(b => b.ExercitoPreto.Usuario)
                 .FirstOrDefault(
                     m=> m.Id == movimento.BatalhaId);
 
