@@ -1,7 +1,7 @@
 # Battle-Board-Games
 Projeto utilizado em Arquitetura de Software
 
-## Introudção
+## Introdução
 
 Um jogo de tabuleiro de arquitetura de software. O jogo está incompleto, pois, um dos objetivos é  que os alunos alterem e compreendam como uma boa arquitetura poderá facilitar a manutenção do jogo.
 
